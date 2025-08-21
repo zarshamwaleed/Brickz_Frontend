@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import workersData from "@/data/workers.json";
+import Image from "next/image";
+
 
 export default function AssignWorkerPage() {
   const [selectedWorkers, setSelectedWorkers] = useState([]);
@@ -121,11 +123,14 @@ export default function AssignWorkerPage() {
                 <div className="space-y-1 text-center">
                   {preview ? (
                     <div className="flex flex-col items-center">
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded-md mb-4"
-                      />
+                     <Image
+  src={preview}
+  alt="Preview"
+  width={128}
+  height={128}
+  className="w-32 h-32 object-cover rounded-md mb-4"
+/>
+
                       <button
                         type="button"
                         onClick={() => {

@@ -70,7 +70,8 @@ export default function TasksPage() {
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Task Management</h1>
-            <p className="text-gray-600 mt-2">Manage and track all your team's tasks in one place</p>
+         <p className="text-gray-600 mt-2">Manage and track all your team&apos;s tasks in one place</p>
+
           </div>
           <button
             onClick={() => router.push("/add-task")}
