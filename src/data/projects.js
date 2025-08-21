@@ -13,7 +13,7 @@ export const projects = [
   },
   {
     id: 2,
-    name: "Residential Tower A Paint",
+    name: "Residential Tower A ",
     status: "At Risk",
     description: "30-story residential building",
     budget: "$1.8M",
