@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import { 
   FaArrowLeft, 
   FaCalendarAlt, 
@@ -25,12 +26,16 @@ export default function AddEventPage({ task, onAddEvent, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!formData.label || !formData.date) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
+if (!formData.label || !formData.date) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Oops!',
+    text: 'Please fill in all required fields',
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'OK'
+  });
+  return;
+}
     const newEvent = {
       label: formData.label,
       date: `${formData.date}${formData.time ? ` - ${formData.time}` : ''}`,

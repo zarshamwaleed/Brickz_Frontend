@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import { 
   FaClock, 
   FaPlus, 
@@ -95,12 +96,30 @@ export default function Timeline({ task }) {
     setTimeline(updatedTimeline);
   };
 
-  const handleDeleteEvent = (index) => {
-    if (confirm("Are you sure you want to delete this event?")) {
-      const updatedTimeline = timeline.filter((_, i) => i !== index);
-      setTimeline(updatedTimeline);
-    }
-  };
+  const handleDeleteEvent = async (index) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "Do you really want to delete this event?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (result.isConfirmed) {
+    const updatedTimeline = timeline.filter((_, i) => i !== index);
+    setTimeline(updatedTimeline);
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Deleted!',
+      text: 'The event has been deleted.',
+      confirmButtonColor: '#3085d6',
+    });
+  }
+};
 
   if (showAddEvent) {
     return (

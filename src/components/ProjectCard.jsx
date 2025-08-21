@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { projects, statusStyles } from "@/data/projects";
-
+import Swal from "sweetalert2";
 export default function ProjectCard() {
   const [filter, setFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,14 +18,37 @@ export default function ProjectCard() {
     return matchesFilter && matchesSearch;
   });
 
-  const handleDelete = (id) => {
-    if (confirm(`Are you sure you want to delete project ${id}?`)) {
-      setProjectList(projectList.filter((project) => project.id !== id));
-      alert(`Project ${id} deleted successfully!`);
-      // In a real app, make a DELETE request: fetch(`/api/projects/${id}`, { method: 'DELETE' })
-    }
-    setOpenMenu(null);
-  };
+
+const handleDelete = async (id) => {
+  // Show confirmation dialog
+  const result = await Swal.fire({
+    title: `Are you sure?`,
+    text: `Do you really want to delete project ${id}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  });
+
+  if (result.isConfirmed) {
+    // Delete from state
+    setProjectList(projectList.filter((project) => project.id !== id));
+
+    // Show success alert
+    Swal.fire({
+      title: 'Deleted!',
+      text: `Project ${id} deleted successfully!`,
+      icon: 'success',
+      timer: 2000,        // Auto-close after 2 seconds
+      showConfirmButton: false
+    });
+  }
+
+  setOpenMenu(null);
+};
+
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import Swal from "sweetalert2";
 export default function AddProjectPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -57,39 +57,48 @@ export default function AddProjectPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const newProject = {
-        ...formData,
-        deadline: formData.deadline.toDateString(),
-        id: Math.floor(Math.random() * 1000) // Generate a temporary ID
-      };
+  e.preventDefault();
 
-      console.log("New Project:", newProject);
-      
-      // Here you would typically POST to your backend API
-      // await fetch('/api/projects', { method: 'POST', body: JSON.stringify(newProject) });
-      
-      // Show success message (you could use a toast notification here)
-      alert("Project created successfully!");
-      
-      router.push("/projects");
-    } catch (error) {
-      console.error("Error creating project:", error);
-      alert("There was an error creating the project. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (!validateForm()) return;
 
+  setIsSubmitting(true);
+
+  try {
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const newProject = {
+      ...formData,
+      deadline: formData.deadline.toDateString(),
+      id: Math.floor(Math.random() * 1000), // Temporary ID
+    };
+
+    console.log("New Project:", newProject);
+
+    // SweetAlert success message
+    await Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Project created successfully!',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK',
+    });
+
+    router.push("/projects");
+  } catch (error) {
+    console.error("Error creating project:", error);
+
+    await Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'There was an error creating the project. Please try again.',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'OK',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   const statusOptions = [
     { value: "Planning", label: "Planning", color: "bg-blue-500" },
     { value: "Active", label: "Active", color: "bg-green-500" },

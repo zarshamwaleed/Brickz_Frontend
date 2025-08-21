@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import workersData from "@/data/workers.json";
 import placeholderImg from "@/assets/profilebgRemove.png";
-
+import Swal from "sweetalert2";
 export default function EditWorker({ params }) {
   const router = useRouter();
   const worker = workersData.find((w) => w.id.toString() === params.id);
@@ -45,24 +45,30 @@ export default function EditWorker({ params }) {
     }
   };
 
-  const handleSave = () => {
-    const updatedData = { ...formData, image: preview };
+const handleSave = async () => {
+  const updatedData = { ...formData, image: preview };
 
-    // convert skills string to array
-    if (typeof updatedData.skills === "string") {
-      updatedData.skills = updatedData.skills
-        .split(",")
-        .map((s) => s.trim());
-    }
+  // Convert skills string to array
+  if (typeof updatedData.skills === "string") {
+    updatedData.skills = updatedData.skills
+      .split(",")
+      .map((s) => s.trim());
+  }
 
-    console.log("Updated Worker:", updatedData);
-    // 🔥 Call API to update worker in DB
-    
-    // Show success message and redirect
-    alert("Worker updated successfully!");
-    router.push("/worker-management");
-  };
+  console.log("Updated Worker:", updatedData);
+  // 🔥 Call API to update worker in DB
 
+  // Show success message using SweetAlert
+  await Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: 'Worker updated successfully!',
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'OK'
+  });
+
+  router.push("/worker-management");
+};
   const handleCancel = () => {
     router.push("/worker-management");
   };

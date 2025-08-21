@@ -3,7 +3,7 @@ import { useState } from "react";
 import workersData from "@/data/workers.json";
 import { projects } from "@/data/projects";
 import { useRouter } from "next/navigation";
-
+import Swal from "sweetalert2";
 export default function AddTaskPage() {
   const [formData, setFormData] = useState({
     title: "",
@@ -79,40 +79,50 @@ export default function AddTaskPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  if (!validateForm()) return;
+  
+  setIsSubmitting(true);
+  
+  try {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const newTask = {
-        ...formData,
-        assigned: `${assignedWorkers.length} workers`,
-        workers: workersData.filter((w) => assignedWorkers.includes(w.id)),
-        subtasks,
-        id: Math.floor(Math.random() * 1000) // Generate a temporary ID
-      };
+    const newTask = {
+      ...formData,
+      assigned: `${assignedWorkers.length} workers`,
+      workers: workersData.filter((w) => assignedWorkers.includes(w.id)),
+      subtasks,
+      id: Math.floor(Math.random() * 1000) // Temporary ID
+    };
 
-      console.log("New Task Created:", newTask);
-      
-      // Here you would typically POST to your backend API
-      // await fetch('/api/tasks', { method: 'POST', body: JSON.stringify(newTask) });
-      
-      // Show success message
-      alert("Task created successfully!");
-      
-      router.push("/projects");
-    } catch (error) {
-      console.error("Error creating task:", error);
-      alert("There was an error creating the task. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    console.log("New Task Created:", newTask);
+    
+    // Show success message using SweetAlert
+    await Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Task created successfully!',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK'
+    });
+
+    router.push("/projects");
+    
+  } catch (error) {
+    console.error("Error creating task:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops!',
+      text: 'There was an error creating the task. Please try again.',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'OK'
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const statusOptions = [
     { value: "Not Started", label: "Not Started", color: "bg-gray-500" },

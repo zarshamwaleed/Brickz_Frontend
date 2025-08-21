@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PhaseCard from "@/components/PhaseCard";
-
+import Swal from "sweetalert2";
 export default function PhasesSection({ initialPhases = [] }) {
   const [phases, setPhases] = useState(initialPhases);
   const router = useRouter();
@@ -29,12 +29,29 @@ export default function PhasesSection({ initialPhases = [] }) {
   };
 
   // ✅ Delete Phase
-  const handleDeletePhase = (phaseId) => {
-    if (confirm("Are you sure you want to delete this phase? This action cannot be undone.")) {
-      setPhases(prev => prev.filter(p => p.id !== phaseId));
-    }
-  };
+const handleDeletePhase = async (phaseId) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This phase will be permanently deleted. This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
 
+  if (result.isConfirmed) {
+    setPhases(prev => prev.filter(p => p.id !== phaseId));
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Deleted!',
+      text: `Phase ${phaseId} has been deleted.`,
+      confirmButtonColor: '#3085d6',
+    });
+  }
+};
   // ✅ Edit Phase
   const handleEditPhase = (phase) => {
     console.log("Editing phase:", phase);

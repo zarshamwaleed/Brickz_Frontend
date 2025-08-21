@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Calendar } from "lucide-react";
 import { projects, statusStyles } from "@/data/projects";
-
+import Swal from "sweetalert2";
 export default function EditProjectPage() {
   const router = useRouter();
   const { id } = useParams();
@@ -71,27 +71,47 @@ export default function EditProjectPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const updatedProject = {
-        ...formData,
-        id: parseInt(id),
-        deadline: formData.deadline.toDateString(),
-      };
-      console.log("Updated Project:", updatedProject);
-      alert("Project updated successfully!");
-      router.push("/projects");
-    } catch (error) {
-      console.error("Error updating project:", error);
-      alert("There was an error updating the project. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  setIsSubmitting(true);
+
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const updatedProject = {
+      ...formData,
+      id: parseInt(id),
+      deadline: formData.deadline.toDateString(),
+    };
+
+    console.log("Updated Project:", updatedProject);
+
+    // SweetAlert success message
+    await Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Project updated successfully!',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK'
+    });
+
+    router.push("/projects");
+  } catch (error) {
+    console.error("Error updating project:", error);
+
+    await Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'There was an error updating the project. Please try again.',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'OK'
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const statusOptions = [
     { value: "Planning", label: "Planning", color: "bg-blue-500" },
