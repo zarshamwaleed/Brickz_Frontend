@@ -1,6 +1,6 @@
 "use client";
 import { useContext } from "react";
-import { usePathname } from "next/navigation"; // ✅ Import usePathname
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
   HomeIcon,
@@ -35,7 +35,7 @@ const navigation = [
 
 export default function Sidebar() {
   const { isOpen, setIsOpen } = useContext(SidebarContext);
-  const pathname = usePathname(); // ✅ Get current route
+  const pathname = usePathname();
   const user = {
     role: "Site Manager",
   };
@@ -43,7 +43,7 @@ export default function Sidebar() {
   return (
     <div
       className={`fixed top-0 left-0 h-screen flex flex-col bg-neutral-700 text-neutral-50 transition-all duration-300 shadow-md z-50
-        ${isOpen ? "w-64 md:w-64" : "w-16 md:w-20"} md:w-20`}
+        ${isOpen ? "w-16 md:w-64" : "w-16 md:w-20"}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between h-20 border-b border-neutral-400 px-4">
@@ -77,9 +77,29 @@ export default function Sidebar() {
           className="p-2 rounded-md hover:bg-neutral-600"
         >
           {isOpen ? (
-            <ChevronLeftIcon className="h-6 w-6 text-neutral-100" />
+            <>
+              <Image
+                src={logo}
+                alt="Toggle Logo"
+                width={30}
+                height={30}
+                className="inline md:hidden"
+                onError={() => console.error("Failed to load toggle logo image")}
+              />
+              <ChevronLeftIcon className="hidden md:inline h-6 w-6 text-neutral-100" />
+            </>
           ) : (
-            <ChevronRightIcon className="h-6 w-6 text-neutral-100" />
+            <>
+              <Image
+                src={logo}
+                alt="Toggle Logo"
+                width={30}
+                height={30}
+                className="inline md:hidden"
+                onError={() => console.error("Failed to load toggle logo image")}
+              />
+              <ChevronRightIcon className="hidden md:inline h-6 w-6 text-neutral-100" />
+            </>
           )}
         </button>
       </div>
@@ -92,7 +112,7 @@ export default function Sidebar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors duration-200 flex-shrink-0
+                className={`flex items-center px-2 md:px-4 py-3 text-sm font-medium rounded-md transition-colors duration-200 flex-shrink-0
                   ${
                     pathname === item.href
                       ? "bg-neutral-600 text-white"
@@ -100,10 +120,11 @@ export default function Sidebar() {
                   }`}
               >
                 <item.icon
-                  className="mr-3 h-6 w-6 text-neutral-200"
+                  className="h-6 w-6 text-neutral-200 md:mr-3"
                   aria-hidden="true"
                 />
-                {(isOpen || pathname === item.href) && item.name}
+                {/* Show name only on md+ screens when sidebar is open */}
+                {isOpen && <span className="hidden md:inline">{item.name}</span>}
               </Link>
             ))}
           </div>

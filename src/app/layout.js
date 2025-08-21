@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
             {/* Main content wrapper */}
             <div
               className={`flex flex-col flex-1 min-h-screen transition-all duration-300 ${
-                isOpen ? "ml-64" : "ml-20"
+                isOpen ? "ml-16 md:ml-64" : "ml-16 md:ml-20"
               }`}
             >
               {/* Navbar sticky at the top */}

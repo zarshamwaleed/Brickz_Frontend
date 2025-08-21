@@ -77,6 +77,40 @@ export default function EmployeeCards({ workers, selectedDate }) {
     setSelectedEmployee(null);
   };
 
+  // Function to export the report as CSV
+  const exportReport = () => {
+    // Create CSV content
+    const headers = ['Name', 'Employee ID', 'Role', 'Status', 'Phone', 'Email', 'Experience'];
+    const csvContent = [
+      headers.join(','),
+      ...workers.map(worker => {
+        const status = getStatusForDate(worker, selectedDate);
+        const statusLabel = statusConfig[status].label;
+        
+        return [
+          `"${worker.name}"`,
+          worker.employeeId,
+          `"${worker.role}"`,
+          statusLabel,
+          worker.phone,
+          worker.email,
+          worker.experience
+        ].join(',');
+      })
+    ].join('\n');
+
+    // Create a Blob and download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `attendance-report-${selectedDate}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -177,7 +211,10 @@ export default function EmployeeCards({ workers, selectedDate }) {
           <p className="text-sm text-gray-500">
             Showing {workers.length} of {workers.length} employees
           </p>
-          <button className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
+          <button 
+            onClick={exportReport}
+            className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center"
+          >
             Export report
             <svg className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

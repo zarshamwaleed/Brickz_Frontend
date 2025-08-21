@@ -83,7 +83,7 @@ export default function AttendancePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 -mt-8 -ml-6 -mr-6">
       <Head>
         <title>Construction Site Attendance System</title>
         <meta name="description" content="Professional attendance tracking for construction teams" />
