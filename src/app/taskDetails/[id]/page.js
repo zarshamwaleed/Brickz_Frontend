@@ -21,7 +21,10 @@ export default function TaskDetailsPage() {
       <div className="p-6 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Task Not Found</h2>
-          <p className="text-gray-600 mb-6">The task you're looking for doesn't exist.</p>
+         <p className="text-gray-600 mb-6">
+  The task you&apos;re looking for doesn&apos;t exist.
+</p>
+
           <Link href="/tasks" className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition-colors">
             Back to Tasks
           </Link>
